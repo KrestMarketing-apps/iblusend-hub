@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>iBluSend Operations Hub — Funding Tier</title>
+<meta name="description" content="Funding Tier's internal hub for deploying iBluSend iMessage at scale: how it works, GoHighLevel usage, setup checklists, a scalability cost calculator, compliance ceilings, and cost-per-message projections.">
+<link rel="icon" href="https://assets.cdn.filesafe.space/S4ztIlDxBovAboldwbOR/media/68783cf97665d613e6ca8c49.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Open+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/funding-tier-brand.css">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Open Sans',Inter,Arial,sans-serif;background:#04101f;color:#e7eef6;line-height:1.65;-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4,.h{font-family:'Poppins',sans-serif;font-weight:600;line-height:1.2;color:#fff}
+.mono{font-family:'DM Mono',monospace}
+a{color:var(--ft-teal);text-decoration:none}
+.wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+.eyebrow{font-family:'Poppins';font-size:12px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:var(--ft-teal)}
+
+/* NAV */
+.nav{position:sticky;top:0;z-index:50;background:rgba(2,16,31,.82);backdrop-filter:blur(12px);border-bottom:1px solid rgba(3,159,141,.18)}
+.nav-inner{max-width:1080px;margin:0 auto;padding:12px 24px;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.nav-logo{height:30px;width:auto}
+.nav-links{display:flex;gap:22px;flex-wrap:wrap}
+.nav-links a{color:#aebfd0;font-size:13.5px;font-weight:600;font-family:'Poppins';transition:color .15s}
+.nav-links a:hover{color:#fff}
+@media(max-width:780px){.nav-links{display:none}}
+
+/* HERO */
+.hero{position:relative;overflow:hidden;background:linear-gradient(135deg,#000 0%,#022A51 55%,#039F8D 140%);padding:84px 0 96px}
+.hero::after{content:"";position:absolute;inset:0;background:radial-gradient(900px 420px at 78% -10%,rgba(3,159,141,.32),transparent 60%);pointer-events:none}
+.hero-inner{position:relative;z-index:2;max-width:1080px;margin:0 auto;padding:0 24px}
+.hero h1{font-size:clamp(32px,5.4vw,58px);font-weight:800;letter-spacing:-1px;margin:18px 0 18px;max-width:14ch}
+.hero h1 .grad{background:linear-gradient(90deg,#7fe9da,#039F8D);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{font-size:clamp(15px,2vw,19px);color:#c5d6e6;max-width:60ch}
+.hero-cta{display:flex;gap:14px;flex-wrap:wrap;margin-top:32px}
+.btn{display:inline-flex;align-items:center;gap:8px;font-family:'Poppins';font-weight:600;font-size:14.5px;padding:13px 24px;border-radius:12px;cursor:pointer;border:none;transition:transform .12s,box-shadow .2s}
+.btn:hover{transform:translateY(-2px)}
+.btn-primary{background:linear-gradient(135deg,#039F8D,#06c2ab);color:#012;box-shadow:0 10px 30px -10px rgba(3,159,141,.7)}
+.btn-ghost{background:rgba(255,255,255,.07);color:#fff;border:1px solid rgba(255,255,255,.18)}
+.hero-stats{display:flex;gap:36px;flex-wrap:wrap;margin-top:46px}
+.hero-stat .n{font-family:'Poppins';font-size:30px;font-weight:700;color:#fff}
+.hero-stat .l{font-size:12.5px;color:#9fb4c8;letter-spacing:.4px}
+
+/* SECTION */
+section{padding:72px 0;border-bottom:1px solid rgba(255,255,255,.05)}
+.sec-head{margin-bottom:40px;max-width:64ch}
+.sec-head h2{font-size:clamp(24px,3.4vw,36px);font-weight:700;margin:12px 0 10px;letter-spacing:-.5px}
+.sec-head p{color:#a9bccf;font-size:15.5px}
+
+/* CARDS */
+.grid{display:grid;gap:18px}
+.g3{grid-template-columns:repeat(3,1fr)}
+.g2{grid-template-columns:repeat(2,1fr)}
+.g4{grid-template-columns:repeat(4,1fr)}
+@media(max-width:860px){.g3,.g4{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:560px){.g2,.g3,.g4{grid-template-columns:1fr}}
+.card{background:linear-gradient(180deg,rgba(255,255,255,.045),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:24px}
+.card .ic{width:42px;height:42px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:20px;background:linear-gradient(135deg,#022A51,#039F8D);margin-bottom:14px}
+.card h3{font-size:17px;margin-bottom:7px}
+.card p{font-size:14px;color:#a9bccf}
+.step-n{font-family:'Poppins';font-weight:700;font-size:13px;color:var(--ft-teal);letter-spacing:1px}
+
+/* FLOW */
+.flow{display:flex;align-items:stretch;gap:0;flex-wrap:wrap;counter-reset:fl}
+.flow-step{flex:1;min-width:150px;position:relative;padding:22px 18px;text-align:center}
+.flow-step:not(:last-child)::after{content:"→";position:absolute;right:-9px;top:50%;transform:translateY(-50%);color:var(--ft-teal);font-size:20px;z-index:2}
+@media(max-width:680px){.flow-step:not(:last-child)::after{content:"↓";right:auto;left:50%;top:auto;bottom:-14px;transform:translateX(-50%)}}
+.flow-ic{width:54px;height:54px;border-radius:14px;margin:0 auto 12px;display:flex;align-items:center;justify-content:center;font-size:24px;background:linear-gradient(135deg,#022A51,#039F8D)}
+.flow-step h4{font-size:15px;margin-bottom:5px}
+.flow-step p{font-size:12.5px;color:#9fb4c8}
+
+/* GHL */
+.ghl-row{display:flex;gap:16px;align-items:flex-start;padding:16px 0;border-bottom:1px solid rgba(255,255,255,.07)}
+.ghl-row:last-child{border-bottom:none}
+.ghl-badge{flex-shrink:0;width:40px;height:40px;border-radius:11px;background:rgba(3,159,141,.16);border:1px solid rgba(3,159,141,.4);display:flex;align-items:center;justify-content:center;font-size:18px}
+.ghl-row h4{font-size:15.5px;margin-bottom:3px}
+.ghl-row p{font-size:13.5px;color:#a9bccf}
+
+/* CHECKLIST */
+.check-cols{columns:2;column-gap:24px}
+@media(max-width:680px){.check-cols{columns:1}}
+.check-grp{break-inside:avoid;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:18px 18px 8px;margin-bottom:24px}
+.check-grp h4{font-size:14.5px;color:#fff;margin-bottom:12px;display:flex;align-items:center;gap:9px}
+.check-grp h4 .num{width:24px;height:24px;border-radius:7px;background:linear-gradient(135deg,#022A51,#039F8D);display:flex;align-items:center;justify-content:center;font-size:12px;font-family:'Poppins';font-weight:700;flex-shrink:0}
+.ci{display:flex;gap:10px;padding:8px 0;cursor:pointer;align-items:flex-start}
+.ci input{appearance:none;width:19px;height:19px;border:1.5px solid #4d6b86;border-radius:5px;flex-shrink:0;margin-top:2px;cursor:pointer;position:relative;transition:.15s}
+.ci input:checked{background:var(--ft-teal);border-color:var(--ft-teal)}
+.ci input:checked::after{content:"✓";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#012;font-size:12px;font-weight:700}
+.ci span{font-size:13.5px;color:#c5d6e6}
+.ci input:checked + span{color:#7c93a8;text-decoration:line-through}
+.progress{height:8px;background:rgba(255,255,255,.08);border-radius:99px;overflow:hidden;margin:6px 0 26px}
+.progress b{display:block;height:100%;width:0;background:linear-gradient(90deg,#039F8D,#06c2ab);transition:width .3s}
+
+/* CALC */
+.calc-panel{background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.1);border-radius:18px;padding:26px}
+.field label{display:flex;justify-content:space-between;font-size:13px;color:#a9bccf;margin-bottom:6px;font-weight:600}
+.field label b{color:#fff;font-family:'DM Mono'}
+input[type=range]{width:100%;height:6px;-webkit-appearance:none;appearance:none;background:rgba(255,255,255,.14);border-radius:99px;outline:none}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;background:var(--ft-teal);cursor:pointer;border:3px solid #04101f;box-shadow:0 0 0 1px var(--ft-teal)}
+input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;background:var(--ft-teal);cursor:pointer;border:3px solid #04101f}
+input[type=number]{width:100%;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);border-radius:9px;color:#fff;padding:9px 11px;font-family:'DM Mono';font-size:14px}
+input[type=number]:focus{outline:none;border-color:var(--ft-teal)}
+.seg{display:inline-flex;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);border-radius:11px;padding:4px;gap:4px;flex-wrap:wrap}
+.seg button{background:transparent;border:none;color:#a9bccf;font-family:'Poppins';font-weight:600;font-size:13px;padding:8px 16px;border-radius:8px;cursor:pointer;transition:.15s}
+.seg button.on{background:linear-gradient(135deg,#039F8D,#06c2ab);color:#012}
+.seg button.on.risk{background:linear-gradient(135deg,#c0392b,#e25b4a);color:#fff}
+.metric{background:linear-gradient(135deg,#667085 0%,#022A51 100%);border-radius:14px;padding:16px 18px}
+.metric .l{font-size:12px;color:#cdd8e4;font-weight:600}
+.metric .v{font-family:'Poppins';font-size:26px;font-weight:700;color:#fff;margin-top:2px}
+.metric .s{font-size:11px;color:#aebccb}
+.metric.teal{background:linear-gradient(135deg,#022A51 0%,#039F8D 100%)}
+.metric.green .v{color:#bff3ea}
+.bd{border:1px solid rgba(255,255,255,.1);border-radius:13px;overflow:hidden;margin-top:8px}
+.bd-row{display:grid;grid-template-columns:1.3fr 1.4fr 1fr;gap:8px;padding:11px 15px;font-size:13.5px}
+.bd-row:nth-child(odd){background:rgba(255,255,255,.035)}
+.bd-row .k{font-weight:600;color:#fff}
+.bd-row .m{color:#a9bccf}
+.bd-row .r{text-align:right;color:#fff;font-family:'DM Mono'}
+table.proj{width:100%;border-collapse:collapse;font-size:13px;margin-top:8px}
+table.proj th,table.proj td{padding:9px 10px;text-align:right;border-bottom:1px solid rgba(255,255,255,.07)}
+table.proj th{font-family:'Poppins';font-size:11.5px;color:#9fb4c8;text-transform:uppercase;letter-spacing:.5px;text-align:right}
+table.proj th:first-child,table.proj td:first-child{text-align:left}
+table.proj td{font-family:'DM Mono';color:#dce6f0}
+table.proj td.cpm{color:#7fe9da;font-weight:500}
+.tbl-scroll{overflow-x:auto}
+
+/* CEILING */
+.ceil-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+@media(max-width:680px){.ceil-grid{grid-template-columns:repeat(2,1fr)}}
+.ceil{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:18px;text-align:center}
+.ceil .t{font-size:12px;color:#9fb4c8;font-weight:600;letter-spacing:.5px;text-transform:uppercase}
+.ceil .big{font-family:'Poppins';font-size:30px;font-weight:700;color:#fff;margin:6px 0 2px}
+.ceil .sub{font-size:12px;color:#a9bccf}
+.alert{display:flex;gap:12px;align-items:flex-start;border-radius:13px;padding:15px 18px;font-size:13.5px;margin-top:18px;line-height:1.55}
+.alert.warn{background:rgba(192,57,43,.12);border:1px solid rgba(226,91,74,.45);color:#f4c5bd}
+.alert.ok{background:rgba(3,159,141,.1);border:1px solid rgba(3,159,141,.4);color:#bff3ea}
+.alert b{color:#fff}
+.pill{display:inline-block;font-size:11px;font-weight:700;font-family:'Poppins';padding:3px 10px;border-radius:99px;letter-spacing:.5px}
+.pill.safe{background:rgba(3,159,141,.2);color:#7fe9da}
+.pill.risk{background:rgba(226,91,74,.2);color:#f4a99e}
+
+/* FOOTER */
+footer{background:linear-gradient(135deg,#000 0%,#022A51 100%);padding:48px 0 28px}
+.foot-inner{max-width:1080px;margin:0 auto;padding:0 24px;display:flex;justify-content:space-between;gap:28px;flex-wrap:wrap;align-items:center}
+.foot-logo{height:30px;margin-bottom:12px}
+.foot-tag{font-size:12px;color:#7f97ad;max-width:42ch}
+.foot-links{display:flex;flex-direction:column;gap:7px;font-size:13px}
+.foot-links a{color:#aebfd0}
+.foot-bottom{text-align:center;font-size:11px;color:#637d95;margin-top:30px;padding-top:18px;border-top:1px solid rgba(255,255,255,.08)}
+.disc{font-size:11.5px;color:#6f879d;max-width:80ch;margin:14px auto 0;text-align:center;line-height:1.6}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <img class="nav-logo" src="https://assets.cdn.filesafe.space/S4ztIlDxBovAboldwbOR/media/68783cf82035bab4d790ae7e.png" alt="Funding Tier">
+    <div class="nav-links">
+      <a href="#how">How it works</a>
+      <a href="#ghl">In GoHighLevel</a>
+      <a href="#setup">Setup</a>
+      <a href="#calc">Cost calculator</a>
+      <a href="#ceiling">Compliance</a>
+      <a href="#cpm">Cost / message</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="hero-inner">
+    <div class="eyebrow">Funding Tier · iMessage Operations</div>
+    <h1>iBluSend at scale, <span class="grad">without getting flagged.</span></h1>
+    <p>The internal playbook for deploying iBluSend across our line fleet — how the bridge works, how it plugs into GoHighLevel, the full setup checklist, and live calculators for cost, scale, compliance ceilings, and cost-per-message as our follow-ups compound.</p>
+    <div class="hero-cta">
+      <a class="btn btn-primary" href="#calc">Open the cost calculator</a>
+      <a class="btn btn-ghost" href="#setup">Setup checklist</a>
+    </div>
+    <div class="hero-stats">
+      <div class="hero-stat"><div class="n">4 / Mac</div><div class="l">iMessage lines via Fast User Switching</div></div>
+      <div class="hero-stat"><div class="n">$0</div><div class="l">per-message fee (iMessage)</div></div>
+      <div class="hero-stat"><div class="n">98%</div><div class="l">iMessage open rate</div></div>
+    </div>
+  </div>
+</header>
+
+<!-- HOW IT WORKS -->
+<section id="how">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow">How it works</div>
+      <h2>The Mac is the engine. The iPhone just holds the line.</h2>
+      <p>iBluSend runs a bridge app on a Mac that controls native iMessage. Each iPhone only needs an active cellular line, its own Apple ID, and iMessage turned on — which is why an inexpensive used iPhone 6s works fine as a line.</p>
+    </div>
+    <div class="flow">
+      <div class="flow-step"><div class="flow-ic">📱</div><h4>iPhone + line</h4><p>Active plan, unique number, own Apple ID, iMessage on</p></div>
+      <div class="flow-step"><div class="flow-ic">🖥️</div><h4>Mac bridge</h4><p>Runs iBluSend; up to 4 lines per Mac via Fast User Switching</p></div>
+      <div class="flow-step"><div class="flow-ic">🔵</div><h4>iBluSend</h4><p>Native iMessage send/receive, synced three ways</p></div>
+      <div class="flow-step"><div class="flow-ic">🔗</div><h4>GoHighLevel</h4><p>Appears as a native conversation provider in GHL</p></div>
+      <div class="flow-step"><div class="flow-ic">💬</div><h4>Blue bubbles</h4><p>Contacts get real iMessages, replies sync back</p></div>
+    </div>
+    <div class="grid g3" style="margin-top:28px">
+      <div class="card"><div class="ic">🍎</div><h3>Personal Apple ID per line</h3><p>Apple Business Manager blocks iMessage relay — always use a personal Apple ID. Add a second line to one Mac via a new Fast User Switching profile.</p></div>
+      <div class="card"><div class="ic">📞</div><h3>Calls ring the iPhone</h3><p>Inbound calls to the line ring the iPhone, not GHL. Forward them to the GHL line with Google Voice or the carrier.</p></div>
+      <div class="card"><div class="ic">🗂️</div><h3>Multi sub-account</h3><p>Run across different sub-accounts under one account, with devices assigned separately per sub-account.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- GHL -->
+<section id="ghl">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow">In GoHighLevel</div>
+      <h2>How we use it inside GHL</h2>
+      <p>Once connected, iBluSend behaves like a native channel. Existing workflows start sending blue bubbles, and the unique-contact logic is what makes follow-ups effectively free.</p>
+    </div>
+    <div class="grid g2">
+      <div class="card">
+        <div class="ghl-row"><div class="ghl-badge">⚙️</div><div><h4>Set as telephony provider</h4><p>GHL sub-account → Settings → Phone System → Additional Settings → Telephony Provider → iBluSend. Conversational AI, Close Bot, and default sends route through iMessage.</p></div></div>
+        <div class="ghl-row"><div class="ghl-badge">🔀</div><div><h4>Workflow actions &amp; triggers</h4><p>Send iMessage / media / voice drops as workflow actions; trigger on iMessage received, read receipt, link clicked, appointment booked.</p></div></div>
+        <div class="ghl-row"><div class="ghl-badge">🔄</div><div><h4>Two-way sync</h4><p>Replies appear in the GHL conversation view in ~5 seconds; contacts stay synced both directions.</p></div></div>
+      </div>
+      <div class="card">
+        <div class="ghl-row"><div class="ghl-badge">🆕</div><div><h4>New contact = uses your daily cap</h4><p>Only contacts you have never messaged before today count against the unique-contact limit (Pro: 150–375/day).</p></div></div>
+        <div class="ghl-row"><div class="ghl-badge">♻️</div><div><h4>Engaged contact = free forever</h4><p>Once messaged on any prior day, a contact is "engaged." Every future message to them is unlimited and does not touch the daily cap.</p></div></div>
+        <div class="ghl-row"><div class="ghl-badge">🕛</div><div><h4>Counter resets midnight UTC</h4><p>That's ~4–5 PM Pacific. A new daily allotment of new-contact slots opens then; engaged follow-ups never wait.</p></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SETUP -->
+<section id="setup">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow">Setup checklist</div>
+      <h2>Six steps from zero to blue bubbles</h2>
+      <p>Check items off as you go — progress saves to this browser. Built around the Pro plan (5 lines: 4 on Mac #1 + 1 on Mac #2 via Fast User Switching).</p>
+    </div>
+    <div class="progress"><b id="progbar"></b></div>
+    <div class="check-cols" id="checklist"></div>
+    <div class="alert ok" style="margin-top:8px">
+      <span>📊</span>
+      <div><b>Daily limit, in one line:</b> plan for 150–375 brand-new contacts/day and up to ~750–2,500+ total messages/day across 5 lines. New lines must warm up before pushing volume — see the compliance ceiling below.</div>
+    </div>
+  </div>
+</section>
+
+<!-- CALCULATOR -->
+<section id="calc">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow">Scalability &amp; cost</div>
+      <h2>What it costs to scale the fleet</h2>
+      <p>Set a target line count. The model auto-picks the cheapest iBluSend plan mix and computes hardware, monthly burn, and daily capacity. Every input is editable.</p>
+    </div>
+    <div class="calc-panel">
+      <div class="field" style="margin-bottom:20px">
+        <label>Target iMessage lines <b id="o-lines">20</b></label>
+        <input type="range" id="i-lines" min="1" max="100" value="20" step="1">
+      </div>
+      <div class="grid g4" style="gap:12px;margin-bottom:8px">
+        <div class="field"><label>SIM / line / mo</label><input type="number" id="i-sim" value="15" min="0"></div>
+        <div class="field"><label>iPhone 6s (ea)</label><input type="number" id="i-iphone" value="45" min="0"></div>
+        <div class="field"><label>Mac (ea)</label><input type="number" id="i-mac" value="1000" min="0" step="50"></div>
+        <div class="field"><label>Lines / Mac</label><input type="number" id="i-lpm" value="4" min="1"></div>
+      </div>
+      <p style="font-size:11.5px;color:#7f97ad;margin-bottom:22px">Mint Mobile $15 · iPhone 6s $45 (iOS 12+ for iMessage) · Mac mini/MacBook $1,000 · 4 lines per Mac. The Mac runs the bridge; the iPhone only needs a line, Apple ID, and iMessage.</p>
+      <div class="grid g3" style="gap:12px;margin-bottom:18px">
+        <div class="metric teal"><div class="l">Monthly recurring</div><div class="v" id="o-monthly">$0</div><div class="s" id="o-monthly-s"></div></div>
+        <div class="metric"><div class="l">One-time hardware</div><div class="v" id="o-hw">$0</div><div class="s" id="o-hw-s"></div></div>
+        <div class="metric green"><div class="l">Year-1 total</div><div class="v" id="o-y1">$0</div><div class="s">12 mo + hardware</div></div>
+      </div>
+      <div class="bd" id="o-breakdown"></div>
+      <div class="grid g2" style="gap:12px;margin-top:16px">
+        <div class="metric"><div class="l">New contacts / day capacity</div><div class="v" id="o-newc" style="font-size:21px"></div></div>
+        <div class="metric"><div class="l">Total messages / day capacity</div><div class="v" id="o-msgs" style="font-size:21px"></div></div>
+      </div>
+    </div>
+    <p style="font-size:11.5px;color:#7f97ad;margin-top:14px">Plan mix optimized for lowest monthly cost: Agency ($199, 20 lines) + Device Packs ($79.99, +10 lines) as the backbone; Pro ($99, 5 lines) and Starter ($25, 1 line) used only where cheaper at the margin.</p>
+  </div>
+</section>
+
+<!-- CEILING -->
+<section id="ceiling">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow">Compliance ceiling</div>
+      <h2>Stay under the radar — hourly to monthly</h2>
+      <p>Apple publishes no limits and gives no warning: a flagged Apple ID just stops delivering. These are safe per-line ceilings based on real iMessage-bridge operating data, scaled to your fleet. Pick a posture.</p>
+    </div>
+    <div class="seg" id="posture" style="margin-bottom:8px">
+      <button data-p="con" class="on">Conservative</button>
+      <button data-p="mod">Moderate</button>
+      <button data-p="agg">Aggressive</button>
+    </div>
+    <div style="font-size:13px;color:#a9bccf;margin:10px 0 20px" id="posture-desc"></div>
+    <div class="ceil-grid">
+      <div class="ceil"><div class="t">Per hour</div><div class="big" id="c-hour">0</div><div class="sub">across fleet · business hours</div></div>
+      <div class="ceil"><div class="t">Per day</div><div class="big" id="c-day">0</div><div class="sub" id="c-day-s">total messages</div></div>
+      <div class="ceil"><div class="t">Per week</div><div class="big" id="c-week">0</div><div class="sub">~5 sending days</div></div>
+      <div class="ceil"><div class="t">Per month</div><div class="big" id="c-month">0</div><div class="sub">~22 sending days</div></div>
+    </div>
+    <div class="grid g3" style="gap:12px;margin-top:18px">
+      <div class="metric"><div class="l">Safe new contacts / line / day</div><div class="v" id="c-newcline" style="font-size:22px"></div></div>
+      <div class="metric"><div class="l">Safe messages / line / day</div><div class="v" id="c-msgline" style="font-size:22px"></div></div>
+      <div class="metric"><div class="l">Send pacing / line</div><div class="v" style="font-size:22px">1 / 8–20s</div><div class="s">randomized, never fixed</div></div>
+    </div>
+    <div id="ceil-alert"></div>
+    <div class="grid g2" style="gap:14px;margin-top:22px">
+      <div class="card"><div class="ic">🛡️</div><h3>What gets you flagged</h3><p>Identical message content, fixed send intervals, sending at odd hours, high "STOP"/no-reply rates, and spam reports. Even 2–3 reports in a short window can kill an Apple ID.</p></div>
+      <div class="card"><div class="ic">✅</div><h3>What keeps you safe</h3><p>Warm new lines slowly, vary message content, randomize timing, send in business hours, get explicit consent, and rotate volume across the fleet rather than hammering one line.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- COST PER MESSAGE -->
+<section id="cpm" style="border-bottom:none">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow">Cost per iMessage</div>
+      <h2>Why the per-message cost collapses</h2>
+      <p>Monthly cost is fixed (plan + SIMs; iMessage has no per-message fee). Volume compounds as engaged contacts accumulate and we follow up aggressively — so fixed cost ÷ rising volume drives cost-per-message toward near-zero. Capped at the compliance ceiling so it stays realistic.</p>
+    </div>
+    <div class="calc-panel">
+      <div class="grid g3" style="gap:12px;margin-bottom:18px">
+        <div class="field"><label>Follow-ups / engaged contact / day</label><input type="number" id="i-cadence" value="2" min="0" step="1" max="10"></div>
+        <div class="field"><label>Effective deliverability %</label><input type="number" id="i-deliver" value="85" min="10" max="100"></div>
+        <div class="field"><label>Projection months</label><input type="number" id="i-months" value="6" min="1" max="24"></div>
+      </div>
+      <p style="font-size:11.5px;color:#7f97ad;margin-bottom:18px">Uses the line count, plan mix, and the active compliance posture from the sections above. Deliverability discounts raw capacity into actually-delivered messages once Apple throttling and STOPs are factored in.</p>
+      <div class="grid g3" style="gap:12px;margin-bottom:8px">
+        <div class="metric teal"><div class="l">Cost / message — month 1</div><div class="v" id="o-cpm1">$0</div></div>
+        <div class="metric"><div class="l">Cost / message — final month</div><div class="v" id="o-cpmN">$0</div></div>
+        <div class="metric green"><div class="l">Engaged pool — final month</div><div class="v" id="o-poolN">0</div></div>
+      </div>
+      <div class="tbl-scroll">
+        <table class="proj" id="proj-table"></table>
+      </div>
+    </div>
+    <div class="disc">Capacity, cost, and compliance figures are planning estimates based on public iBluSend pricing and real-world iMessage operating data — not guarantees or warranties. Apple sets no published limits and can restrict accounts without notice. Always obtain recipient consent and comply with TCPA and all applicable messaging and debt-relief regulations.</div>
+  </div>
+</section>
+
+<footer>
+  <div class="foot-inner">
+    <div>
+      <img class="foot-logo" src="https://assets.cdn.filesafe.space/S4ztIlDxBovAboldwbOR/media/68783cf82035bab4d790ae7e.png" alt="Funding Tier">
+      <div class="foot-tag">Internal iMessage operations hub. Build everything in Funding Tier brand style.</div>
+    </div>
+    <div class="foot-links">
+      <a href="#how">How it works</a>
+      <a href="#ghl">In GoHighLevel</a>
+      <a href="#setup">Setup checklist</a>
+      <a href="#calc">Cost calculator</a>
+      <a href="#ceiling">Compliance ceiling</a>
+    </div>
+  </div>
+  <div class="foot-bottom">© <span id="yr"></span> Funding Tier · New Money Teal #039F8D · Noble Blue #022A51 — iBluSend is not affiliated with Funding Tier. Apple, iMessage &amp; iPhone are trademarks of Apple Inc. GoHighLevel is a trademark of HighLevel Inc.</div>
+</footer>
+
+<script>
+document.getElementById('yr').textContent=new Date().getFullYear();
+
+/* ---------- CHECKLIST ---------- */
+var CHECK=[
+  ["Mac requirements",["Apple Silicon Mac ready to run the iBluSend Bridge","Mac #1 designated for 4 lines, Mac #2 for the 5th","Each Mac on power and set to never sleep"]],
+  ["iPhones",["Each iPhone has an active plan + unique number","Each iPhone signed into its own personal Apple ID","iMessage ON and Messages in iCloud enabled"]],
+  ["iBluSend subscription",["Plan selected (Pro = 5 lines, BluBrain, BluBot, BluMail)","7-day free trial started; card charges day 8"]],
+  ["User accounts",["One macOS user account per Apple ID","Fast User Switching enabled in System Settings","Full Disk Access + Accessibility granted per profile"]],
+  ["Call forwarding",["Forwarding method chosen (Google Voice or carrier)","Calls forwarded from iBluSend numbers to the GHL line","Test call confirmed ringing through to GHL"]],
+  ["Download & install iBluSend",["Bridge installed in each profile (4 on Mac #1 + 1 on Mac #2)","Each Bridge connected to GoHighLevel","(Optional) iBluSend set as GHL telephony provider","Daily limits reviewed; new lines warmed before scaling"]]
+];
+(function(){
+  var html='',idx=0;
+  CHECK.forEach(function(grp,gi){
+    html+='<div class="check-grp"><h4><span class="num">'+(gi+1)+'</span>'+grp[0]+'</h4>';
+    grp[1].forEach(function(item){
+      html+='<label class="ci"><input type="checkbox" data-i="'+idx+'"><span>'+item+'</span></label>';
+      idx++;
+    });
+    html+='</div>';
+  });
+  document.getElementById('checklist').innerHTML=html;
+  var total=idx;
+  var boxes=document.querySelectorAll('#checklist input');
+  var saved={};
+  try{saved=JSON.parse(localStorage.getItem('ft_iblu_check')||'{}')}catch(e){}
+  boxes.forEach(function(b){ if(saved[b.dataset.i]){b.checked=true;} b.addEventListener('change',upd); });
+  function upd(){
+    var done=0,state={};
+    boxes.forEach(function(b){ if(b.checked){done++;state[b.dataset.i]=1;} });
+    document.getElementById('progbar').style.width=(done/total*100)+'%';
+    try{localStorage.setItem('ft_iblu_check',JSON.stringify(state))}catch(e){}
+  }
+  upd();
+})();
+
+/* ---------- SHARED STATE ---------- */
+var STARTER=25,PRO=99,AGENCY=199,PACK=79.99;
+var POSTURES={
+  con:{label:'Conservative',newc:15,msg:60,desc:'Safest posture for warmed lines — well under the commonly cited limits. Lowest ban risk, ideal while lines are young.'},
+  mod:{label:'Moderate',newc:30,msg:100,desc:'Around the widely cited 100-iMessages-per-day-per-line ceiling. Reasonable for fully warmed, healthy lines with varied content.'},
+  agg:{label:'Aggressive',newc:50,msg:200,desc:'At the upper edge of what bridge operators report. Elevated ban risk — only with seasoned lines, strong consent, and tight reply monitoring.'}
+};
+var posture='con';
+
+function bestPlanMix(L){
+  var best=null,maxA=Math.ceil(L/20)+1;
+  for(var a=0;a<=maxA;a++){
+    var fromA=a*20,remA=L-fromA,maxPk=remA>0?Math.min(Math.ceil(remA/10),a>0?4*a:0):0;
+    for(var pk=0;pk<=maxPk;pk++){
+      var base=a*AGENCY+pk*PACK,cov=fromA+pk*10,rem=L-cov,combos=[];
+      if(rem<=0)combos.push({pro:0,st:0});
+      else{combos.push({pro:Math.ceil(rem/5),st:0});combos.push({pro:0,st:rem});if(rem>5)combos.push({pro:Math.floor(rem/5),st:rem-Math.floor(rem/5)*5});}
+      combos.forEach(function(c){
+        var cap=fromA+pk*10+c.pro*5+c.st;
+        if(cap<L)return;
+        var cost=base+c.pro*PRO+c.st*STARTER;
+        if(!best||cost<best.cost)best={cost:cost,a:a,pk:pk,pro:c.pro,st:c.st,cap:cap};
+      });
+    }
+  }
+  return best;
+}
+var fmt=function(n){return '$'+Math.round(n).toLocaleString()};
+var fmt2=function(n){return '$'+(Math.round(n*100)/100).toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2})};
+var fmtc=function(n){return '$'+(n).toLocaleString(undefined,{minimumFractionDigits:4,maximumFractionDigits:4})};
+var num=function(n){return Math.round(n).toLocaleString()};
+var kfmt=function(n){return n>=1000?Math.round(n/1000)+'k':num(n)};
+
+function lines(){return +document.getElementById('i-lines').value}
+
+/* ---------- COST CALC ---------- */
+function calc(){
+  var L=lines(),sim=+document.getElementById('i-sim').value||0,ip=+document.getElementById('i-iphone').value||0,
+      mac=+document.getElementById('i-mac').value||0,lpm=+document.getElementById('i-lpm').value||4;
+  var mix=bestPlanMix(L),ibMo=mix.cost,simMo=L*sim,monthly=ibMo+simMo;
+  var iphones=L,macs=Math.ceil(L/lpm),hw=iphones*ip+macs*mac,y1=monthly*12+hw;
+  document.getElementById('o-lines').textContent=num(L);
+  document.getElementById('o-monthly').textContent=fmt(monthly);
+  document.getElementById('o-monthly-s').textContent=fmt(ibMo)+' iBluSend + '+fmt(simMo)+' SIMs';
+  document.getElementById('o-hw').textContent=fmt(hw);
+  document.getElementById('o-hw-s').textContent=num(iphones)+' iPhones + '+num(macs)+' Macs';
+  document.getElementById('o-y1').textContent=fmt(y1);
+  document.getElementById('o-newc').textContent=num(L*30)+'–'+num(L*75);
+  document.getElementById('o-msgs').textContent=num(L*150)+'–'+num(L*500);
+  var parts=[];if(mix.a)parts.push(mix.a+' × Agency');if(mix.pk)parts.push(mix.pk+' × Device Pack');if(mix.pro)parts.push(mix.pro+' × Pro');if(mix.st)parts.push(mix.st+' × Starter');
+  var rows=[['iBluSend plan mix',parts.join(' + ')||'—',fmt(ibMo)+'/mo'],
+    ['Mint SIM lines',num(L)+' × '+fmt(sim),fmt(simMo)+'/mo'],
+    ['iPhone 6s units',num(iphones)+' × '+fmt(ip),fmt(iphones*ip)],
+    ['Macs (every '+lpm+' lines)',num(macs)+' × '+fmt(mac),fmt(macs*mac)],
+    ['Lines covered',num(mix.cap)+' (target '+num(L)+')',mix.cap>L?num(mix.cap-L)+' spare':'exact']];
+  document.getElementById('o-breakdown').innerHTML=rows.map(function(r){return '<div class="bd-row"><span class="k">'+r[0]+'</span><span class="m">'+r[1]+'</span><span class="r">'+r[2]+'</span></div>'}).join('');
+  ceiling();cpm();
+}
+
+/* ---------- CEILING ---------- */
+function ceiling(){
+  var L=lines(),P=POSTURES[posture];
+  var dayMsg=L*P.msg,dayNew=L*P.newc;
+  var hrs=8,perHour=Math.round(dayMsg/hrs);
+  document.getElementById('c-hour').textContent=num(perHour);
+  document.getElementById('c-day').textContent=num(dayMsg);
+  document.getElementById('c-day-s').textContent=num(dayNew)+' new contacts';
+  document.getElementById('c-week').textContent=kfmt(dayMsg*5);
+  document.getElementById('c-month').textContent=kfmt(dayMsg*22);
+  document.getElementById('c-newcline').textContent=P.newc;
+  document.getElementById('c-msgline').textContent=P.msg;
+  document.getElementById('posture-desc').textContent=P.desc;
+  var al=document.getElementById('ceil-alert');
+  if(posture==='agg'){
+    al.innerHTML='<div class="alert warn"><span>⚠️</span><div><b>Elevated ban risk.</b> 2×/day to non-responders for a month is the exact pattern Apple flags. This posture only survives with seasoned lines, varied content, randomized timing, explicit consent, and immediate STOP handling. Burned Apple IDs cost ~$45 + a SIM line each to replace and reset your warmup.</div></div>';
+  } else if(posture==='mod'){
+    al.innerHTML='<div class="alert ok"><span>🛈</span><div><b>Balanced.</b> Near the ~100/day/line ceiling most operators treat as the safe maximum for healthy, warmed lines.</div></div>';
+  } else {
+    al.innerHTML='<div class="alert ok"><span>✅</span><div><b>Lowest risk.</b> Comfortable headroom under common limits — the right posture while lines are warming up.</div></div>';
+  }
+}
+
+/* ---------- COST PER MESSAGE PROJECTION ---------- */
+function cpm(){
+  var L=lines(),sim=+document.getElementById('i-sim').value||0;
+  var mix=bestPlanMix(L),monthly=mix.cost+L*sim;
+  var cadence=+document.getElementById('i-cadence').value||0;
+  var deliver=(+document.getElementById('i-deliver').value||100)/100;
+  var months=Math.min(24,Math.max(1,+document.getElementById('i-months').value||6));
+  var P=POSTURES[posture];
+  var dailyNewCap=L*P.newc, dailyMsgCap=L*P.msg;
+  var sendDays=22;
+  var pool=0,rows=[],cpm1=0,cpmN=0,poolN=0;
+  for(var m=1;m<=months;m++){
+    var monthNew=0,monthFollow=0;
+    for(var d=0;d<sendDays;d++){
+      var newToday=dailyNewCap;
+      var followRoom=Math.max(0,dailyMsgCap-newToday);
+      var followWant=pool*cadence;
+      var followToday=Math.min(followWant,followRoom);
+      monthNew+=newToday;monthFollow+=followToday;
+      pool+=newToday;
+    }
+    var rawTotal=monthNew+monthFollow;
+    var delivered=rawTotal*deliver;
+    var cpmRaw=monthly/rawTotal;
+    var cpmDel=monthly/delivered;
+    rows.push([m,num(monthNew),num(monthFollow),num(rawTotal),num(Math.round(delivered)),fmtc(cpmDel)]);
+    if(m===1)cpm1=cpmDel;
+    cpmN=cpmDel;poolN=pool;
+  }
+  document.getElementById('o-cpm1').textContent=fmtc(cpm1);
+  document.getElementById('o-cpmN').textContent=fmtc(cpmN);
+  document.getElementById('o-poolN').textContent=kfmt(poolN);
+  var head='<tr><th>Mo</th><th>New sent</th><th>Follow-ups</th><th>Total (raw)</th><th>Delivered</th><th>Cost / msg</th></tr>';
+  var body=rows.map(function(r){return '<tr><td>'+r[0]+'</td><td>'+r[1]+'</td><td>'+r[2]+'</td><td>'+r[3]+'</td><td>'+r[4]+'</td><td class="cpm">'+r[5]+'</td></tr>'}).join('');
+  document.getElementById('proj-table').innerHTML=head+body;
+}
+
+/* ---------- WIRING ---------- */
+document.getElementById('i-lines').addEventListener('input',calc);
+['i-sim','i-iphone','i-mac','i-lpm'].forEach(function(id){document.getElementById(id).addEventListener('input',calc)});
+['i-cadence','i-deliver','i-months'].forEach(function(id){document.getElementById(id).addEventListener('input',cpm)});
+document.querySelectorAll('#posture button').forEach(function(b){
+  b.addEventListener('click',function(){
+    posture=b.dataset.p;
+    document.querySelectorAll('#posture button').forEach(function(x){x.classList.remove('on','risk')});
+    b.classList.add('on');if(posture==='agg')b.classList.add('risk');
+    ceiling();cpm();
+  });
+});
+calc();
+</script>
+</body>
+</html>

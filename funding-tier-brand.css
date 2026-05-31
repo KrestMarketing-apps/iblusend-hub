@@ -1,0 +1,21 @@
+:root {
+  --ft-gray: #667085;
+  --ft-white: #FFFFFF;
+  --ft-teal: #039F8D;
+  --ft-black: #000000;
+  --ft-blue: #022A51;
+  --ft-core-trust: linear-gradient(135deg, #022A51 0%, #039F8D 100%);
+  --ft-midnight-trust: linear-gradient(135deg, #000000 0%, #022A51 100%);
+  --ft-teal-horizon: linear-gradient(135deg, #039F8D 0%, #022A51 100%);
+  --ft-slate-signal: linear-gradient(135deg, #667085 0%, #022A51 100%);
+  --ft-clean-finance: linear-gradient(135deg, #FFFFFF 0%, #D7F6F1 55%, #039F8D 100%);
+  --ft-premium-depth: linear-gradient(135deg, #000000 0%, #022A51 55%, #039F8D 100%);
+}
+
+/* Funding Tier named gradient utility classes */
+.bg-ft-core-trust { background: linear-gradient(135deg, #022A51 0%, #039F8D 100%); }
+.bg-ft-midnight-trust { background: linear-gradient(135deg, #000000 0%, #022A51 100%); }
+.bg-ft-teal-horizon { background: linear-gradient(135deg, #039F8D 0%, #022A51 100%); }
+.bg-ft-slate-signal { background: linear-gradient(135deg, #667085 0%, #022A51 100%); }
+.bg-ft-clean-finance { background: linear-gradient(135deg, #FFFFFF 0%, #D7F6F1 55%, #039F8D 100%); }
+.bg-ft-premium-depth { background: linear-gradient(135deg, #000000 0%, #022A51 55%, #039F8D 100%); }
